@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a class = "btn btn-success" href = "post/create" > Add Post </a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Text</th>
+            <th scope="col">View</th>
+            <th scope="col">Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+         {% for x in all %}      
+            <tr>         
+                <td style="color: green "> {{x.title}}</td>
+                <td style="color: green "> {{x.created_date}}</td>
+                <td style="color: green "> view</td>
+                <td style="color: green "> edit</td>
+            </tr>
+        {% endfor %} 
+    </tbody>
+</table>
+{% endblock %}
