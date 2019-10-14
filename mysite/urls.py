@@ -25,7 +25,7 @@ urlpatterns = [
     path('', views.post_create, name='post_new'),
     path('post', views.post_index, name='post'),
     path('post/create', views.post_create, name='post.create'),
-    path('post/<int:pk>/edit/', views.post_edit, name='post_edit'),
+    # path('post/<int:pk>/edit/', views.post_edit, name='post_edit'),
 
 
     # path('fetch',views.post_fetch, name='post_fetch')
