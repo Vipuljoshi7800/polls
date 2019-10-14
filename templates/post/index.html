@@ -16,8 +16,8 @@
             <tr>         
                 <td style="color: green "> {{x.title}}</td>
                 <td style="color: green "> {{x.created_date}}</td>
-                <td style="color: green "> view</td>
-                <td style="color: green "> edit</td>
+                <td style="color: green "><a class="btn btn-default" href="{% url 'post_detail' pk=x.pk %}">View</a></td>
+                <td style="color: green "><a class="btn btn-default" href="{% url 'post_edit' pk=x.pk %}">Edit</a></td>
             </tr>
         {% endfor %} 
     </tbody>

@@ -22,11 +22,15 @@ from django.urls import path
 
 
 urlpatterns = [
-    path('', views.post_create, name='post_new'),
+    path('admin/', admin.site.urls),
+    path('', views.post_create, name=''),
     path('post', views.post_index, name='post'),
-    path('post/create', views.post_create, name='post.create'),
-    # path('post/<int:pk>/edit/', views.post_edit, name='post_edit'),
+    path('post/create', views.post_create, name='post_create'),
+    path('post/<int:pk>', views.post_detail, name='post_detail'),
+    path('post/<int:pk>/edit/', views.post_edit, name='post_edit'),
 
+
+    # path('post/<int:pk>/edit/', views.post_edit, name='post_edit'),
 
     # path('fetch',views.post_fetch, name='post_fetch')
     # path('', views.post_list, name='post_list'),
