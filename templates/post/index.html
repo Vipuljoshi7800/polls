@@ -1,25 +1,66 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<a class = "btn btn-success" href = "post/create" > Add Post </a>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Title</th>
-            <th scope="col">Text</th>
-            <th scope="col">View</th>
-            <th scope="col">Edit</th>
-        </tr>
-    </thead>
-    <tbody>
-         {% for x in all %}      
-            <tr>         
-                <td style="color: green "> {{x.title}}</td>
-                <td style="color: green "> {{x.created_date}}</td>
-                <td style="color: green "><a class="btn btn-default" href="{% url 'post_detail' pk=x.pk %}">View</a></td>
-                <td style="color: green "><a class="btn btn-default" href="{% url 'post_edit' pk=x.pk %}">Edit</a></td>
+
+<!-- search user -->
+<div class="page-header">
+   <div id="navbar" class="">
+       <form class="navbar-form" method="post" action="">
+              <!-- avoid CSRF verification failed error. -->
+              {% csrf_token %}
+           <div class="form-group">
+              <input name="user_name" type="text" placeholder="User Name" class="form-control" value="{{ search_user_name }}">
+           </div>
+           <button type="submit" class="btn btn-success">Search</button>
+       </form>
+   </div>
+</div>
+
+    <a class = "btn btn-success" href = "post/create" > Add Post </a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Text</th>
+                <th scope="col">View</th>
+                <th scope="col">Edit</th>
             </tr>
-        {% endfor %} 
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for x in post_list %}      
+                <tr>         
+                    <td style="color: green "> {{x.title}}</td>
+                    <td style="color: green "> {{x.created_date}}</td>
+                    <td style="color: green "><a class="btn btn-default" href="{% url 'post_detail' pk=x.pk %}">View</a></td>
+                    <td style="color: green "><a class="btn btn-default" href="{% url 'post_edit' pk=x.pk %}">Edit</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <!-- previous page link -->
+        {% if post_list.has_previous %}
+            <a href="{{ base_url }}page={{ post_list.previous_page_number }}">Prev</a></li>
+        {% else %}
+            <span class="disabled">Prev</span>
+        {% endif %}
+        <!-- page number link-->
+        {% for i in paginator.page_range %}
+            {% if post_list.number == i %}
+                <span class="active">{{ i }} <span class="sr-only">(current)</span></span>
+            {% else %}
+                <a href="{{ base_url }}page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+        <!-- next page link -->
+        {% if post_list.has_next %}
+    
+            <a href="{{ base_url }}page={{ post_list.next_page_number }}">Next</a>
+        {% else %}
+    
+            <span class="disabled">Next</span>
+    
+        {% endif %}
+    </div>
 {% endblock %}
