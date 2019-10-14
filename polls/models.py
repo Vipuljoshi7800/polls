@@ -8,7 +8,16 @@ from django import forms
 
 POST_STATUS = (
    ('Pub', 'Public'),
-   ('Pri', 'Private')
+   ('Pri', 'Private'),
+   ('pro', 'Protected'),
+)
+
+COLOR_CHOICES = (
+    ('green','GREEN'),
+    ('blue', 'BLUE'),
+    ('red','RED'),
+    ('orange','ORANGE'),
+    ('black','BLACK'),
 )
 
 class Post(models.Model):
@@ -18,6 +27,7 @@ class Post(models.Model):
     comment_count = models.IntegerField()
     email = models.EmailField(max_length=100)
     post_status = models.CharField(choices=POST_STATUS, max_length=128)
+    color_choices = models.CharField(choices=COLOR_CHOICES, max_length=150)
     created_date = models.DateField()
 
     

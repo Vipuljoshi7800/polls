@@ -8,13 +8,15 @@ from django.utils.translation import ugettext_lazy as _
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('title','description','category','comment_count','email','post_status','created_date')
-        labels = {"text": "title", "public": "label for public"}
+        fields = ('title','description','category','comment_count','email','post_status','color_choices','created_date')
+        # labels = {"text": "title", "public": "label for public"}
 
 class MyForm(forms.Form):
 
     CHOICES = (('Option 1', 'Option 1'),('Option 2', 'Option 2'),)
+    CHOICES2 = (('Option 1', 'option 1',),('Option 2', 'option 2',),('Option 3', 'option 3',),('Option 4', 'option 4',))
     field = forms.ChoiceField(choices=CHOICES)
+    field2 = forms.ChoiceField(choices = CHOICES2)
     renewal_date = forms.DateField(help_text="Enter a date between now and 4 weeks (default 3).")
     def clean_renewal_date(self):
         data = self.cleaned_data['renewal_date']
