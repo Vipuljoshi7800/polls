@@ -20,7 +20,6 @@ from django.urls import include, path
 from polls import views
 from django.urls import path 
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.post_create, name=''),

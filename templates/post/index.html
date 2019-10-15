@@ -5,11 +5,11 @@
 <!-- search user -->
 <div class="page-header">
    <div id="navbar" class="">
-       <form class="navbar-form" method="post" action="">
+       <form class="navbar-form" method="get" action="search">
               <!-- avoid CSRF verification failed error. -->
-              {% csrf_token %}
+              {% comment %} {% csrf_token %} {% endcomment %}
            <div class="form-group">
-              <input name="user_name" type="text" placeholder="User Name" class="form-control" value="{{ search_user_name }}">
+              <input name="title" type="text" placeholder="Title" class="form-control" value="{{ searched_keyword }}">
            </div>
            <button type="submit" class="btn btn-success">Search</button>
        </form>
@@ -21,7 +21,9 @@
         <thead>
             <tr>
                 <th scope="col">Title</th>
-                <th scope="col">Text</th>
+                <th scope="col">Email</th>
+                <th scope="col">Date</th>
+                <th scope="col">Color_Choice</th>
                 <th scope="col">View</th>
                 <th scope="col">Edit</th>
             </tr>
@@ -30,7 +32,9 @@
             {% for x in post_list %}      
                 <tr>         
                     <td style="color: green "> {{x.title}}</td>
+                    <td style="color: green "> {{x.email}}</td>
                     <td style="color: green "> {{x.created_date}}</td>
+                    <td style="color: green "> {{x.color_choices}}</td>
                     <td style="color: green "><a class="btn btn-default" href="{% url 'post_detail' pk=x.pk %}">View</a></td>
                     <td style="color: green "><a class="btn btn-default" href="{% url 'post_edit' pk=x.pk %}">Edit</a></td>
                 </tr>
@@ -43,7 +47,7 @@
         {% if post_list.has_previous %}
             <a href="{{ base_url }}page={{ post_list.previous_page_number }}">Prev</a></li>
         {% else %}
-            <span class="disabled">Prev</span>
+            <span class="disabled" hidden>Prev</span>
         {% endif %}
         <!-- page number link-->
         {% for i in paginator.page_range %}
@@ -55,12 +59,30 @@
         {% endfor %}
         <!-- next page link -->
         {% if post_list.has_next %}
-    
             <a href="{{ base_url }}page={{ post_list.next_page_number }}">Next</a>
         {% else %}
-    
-            <span class="disabled">Next</span>
-    
+            <span class="disabled" hidden>Next</span>
         {% endif %}
+
+      <div class="page-header">
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-danger  {% if message.tags %}alert-{{ message.tags }}{% endif %} " role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %} 
+        <br>
+            {% if sr %}
+                {% for i in sr %}
+                <table>
+                    <td>{{ i.title}}</td>
+                {% endfor %}
+            {% endif %}
+                </tr>
+            </table>
+       </div> 
+
+
+
+
     </div>
 {% endblock %}

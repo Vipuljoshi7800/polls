@@ -1,19 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="post">
-        {% if post.created_date %}
-            <div class="date">
-                {{ post.created_date }}
+
+<table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">title</th>
+                <th scope="col">email</th>
+                <th scope="col">comment_count</th>
+                <th scope="col">description</th>
+                <th scope="col">category</th>
+                <th scope="col">post_status</th>
+                <th scope="col">created_date</th>
+                <th scope="col">color_choices</th>
+            </tr>
+        </thead>
+        <tbody>
+            <div class="post">
+                {% if post.created_date %}
+                    <div class="date">
+                        {{ post.created_date }}
+                    </div>
+                {% endif %}
+                    <tr>         
+                        <td style="color: green "> {{ post.title }}</td>
+                        <td style="color: green "> {{ post.email }}</td>
+                        <td style="color: green "> {{ post.comment_count }}</td>
+                        <td style="color: green "> {{ post.description }}</td>
+                        <td style="color: green "> {{ post.category }}</td>
+                        <td style="color: green "> {{ post.post_status }}</td>
+                        <td style="color: green "> {{ post.created_date }}</td>
+                        <td style="color: green "> {{ post.color_choices }}</td>
+                    </tr>
             </div>
-        {% endif %}
-        <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}">Edit</a>
-        <h2>{{ post.title }}</h2>
-        <h2>{{ post.comment_count }}</h2>
-        <h2>{{ post.email }}</h2>
-        <h2>{{ post.description }}</h2>
-        <h2>{{ post.category }}</h2>
-        <h2>{{ post.post_status }}</h2>
-        <p>{{ post.created_date }}</p>
-    </div>
+        </tbody>
 {% endblock %}
