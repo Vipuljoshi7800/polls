@@ -10,6 +10,9 @@ from polls.models import Post
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
+from django.contrib.postgres.search import SearchVector
+from django.contrib import auth, messages
+from django.db.models import Q
 
 def post_create(request):
   if request.method == "POST":
@@ -24,56 +27,46 @@ def post_create(request):
   
 def post_index(request):
   post_list = Post.objects.all()
-  paginator = Paginator(post_list, 4)
-  
+  # paginator = Paginator(post_list, 4)
+
   try:
     page_number = int(request.GET.get('page', '1'))
   except:
     page_number = 1
+
+  post_result = do_paginate(post_list, page_number)
+ 
+  # try:
+  #   # get data list for the specified page_number.
+  #   posts = paginator.page(page_number)
+  # except PageNotAnInteger:
+  #   # if the page_number is not an integer then return the first page data.
+  #   posts = paginator.page(1)
+  # except EmptyPage:
+  #   # get the lat page data if the page_number is bigger than last page number.
+  #   posts = paginator.page(paginator.num_pages)
   
-  try:
-    # get data list for the specified page_number.
-    posts = paginator.page(page_number)
-  except PageNotAnInteger:
-    # if the page_number is not an integer then return the first page data.
-    posts = paginator.page(1)
-  except EmptyPage:
-    # get the lat page data if the page_number is bigger than last page number.
-    posts = paginator.page(paginator.num_pages)
+  posts = post_result[0]
+  paginator = post_result[1]
 
   base_url = '/post?' 
-  return render(request, 'post/index.html', {'post_list': posts, 'paginator' : paginator, 'base_url': base_url})
-
-  # contacts = paginator.get_page(page)
-  # return render(request, 'post/index.html', {'contacts': contacts})
-
-  # page_number = request.GET.get('page', 3)
-  # page = request.Ge
-  # paginate_result = Paginator(user_list, page_number)
-  # user_list = paginate_result(1)
-  # paginator = paginate_result(4)
-   
-  # return render(request, 'post/index.html',{'user_list': user_list, 'paginator' : paginator})
- 
-  # all = Post.objects.all()
-  # return render(request,'post/index.html',{'all':all})
+  return render(request, 'post/index.html',{'post_list': posts, 'paginator' : paginator, 'base_url': base_url})
 
 def do_paginate(data_list, page_number):
-    ret_data_list = data_list
-    # suppose we display at most 2 records in each page.
-    result_per_page = 2
-    # build the paginator object.
+    result_per_page = 4
     paginator = Paginator(data_list, result_per_page)
+
     try:
-        # get data list for the specified page_number.
-        ret_data_list = paginator.page(page_number)
-    except EmptyPage:
-        # get the lat page data if the page_number is bigger than last page number.
-        ret_data_list = paginator.page(paginator.num_pages)
+      # get data list for the specified page_number.
+      posts = paginator.page(page_number)
     except PageNotAnInteger:
-        # if the page_number is not an integer then return the first page data.
-        ret_data_list = paginator.page(1)
-    return [ret_data_list, paginator]
+      # if the page_number is not an integer then return the first page data.
+      posts = paginator.page(1)
+    except EmptyPage:
+      # get the lat page data if the page_number is bigger than last page number.
+      posts = paginator.page(paginator.num_pages)
+    
+    return [posts, paginator]
 
 def post_detail(request, pk):
   post = get_object_or_404(Post, pk=pk)
@@ -92,3 +85,29 @@ def post_edit(request, pk):
     form = PostForm(instance=post)
   return render(request, 'post_edit.html', {'form': form})
 
+def search(request):
+  if request.method == 'GET':
+    searched_keyword = request.GET['title']
+    
+    if searched_keyword:
+      post_list = Post.objects.filter(Q(title__icontains=searched_keyword) | Q(email__icontains=searched_keyword))
+      if post_list:
+        try:
+          page_number = int(request.GET.get('page', '1'))
+
+        except:
+          page_number = 1
+        post_result = do_paginate(post_list, page_number)
+
+        posts = post_result[0]
+
+        paginator = post_result[1]
+
+        base_url = '/post?' 
+        return render(request, 'post/index.html',{'post_list': posts, 'paginator' : paginator, 'base_url': base_url, 'searched_keyword': searched_keyword})
+        # return render(request,'post/index.html',{'post_list':post_list, })
+      else:
+        messages.add_message(request,messages.INFO,' No result found ')
+    else:
+      return redirect('post')
+  return render(request,"post/index.html")

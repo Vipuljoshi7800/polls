@@ -28,12 +28,6 @@ urlpatterns = [
     path('post/create', views.post_create, name='post_create'),
     path('post/<int:pk>', views.post_detail, name='post_detail'),
     path('post/<int:pk>/edit/', views.post_edit, name='post_edit'),
+    path('search',views.search,name="search")
 
-
-    # path('post/<int:pk>/edit/', views.post_edit, name='post_edit'),
-
-    # path('fetch',views.post_fetch, name='post_fetch')
-    # path('', views.post_list, name='post_list'),
-    # path('post/<int:pk>/', views.post_detail, name='post_detail'),
-    # path('post/new/', views.post_new, name='post_new'),
 ]

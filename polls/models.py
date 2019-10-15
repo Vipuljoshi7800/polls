@@ -30,3 +30,6 @@ class Post(models.Model):
     color_choices = models.CharField(choices=COLOR_CHOICES, max_length=150)
     created_date = models.DateField()
 
+    def __str__(self):
+        return self.title
+
