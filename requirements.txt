@@ -4,7 +4,7 @@ asn1crypto==0.24.0
 astroid==2.2.5
 asyncore-wsgi==0.0.9
 attrs==19.1.0
-autobahn==19.9.2
+autobahn==20.12.3
 Automat==0.7.0
 Babel==2.7.0
 backports.csv==1.0.7
